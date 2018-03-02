@@ -1,32 +1,16 @@
-<html>
-	<head>
-		<title>Comdty blog</title>
-	</head>
-	<body>
-		<div>
-			<h1><a href="">Comdty Blog</a></h1>
-		</div>
+{% extends 'comdty/base.html' %}
 
-		<div>
-			<p>
-				published: 23.02.2018, 12:14
-			</p>
-			<h2><a href="">My first post</a></h2>
-			<p>
-				MiraeAsset Daewoo FICC
-			</p>
-		</div>
+{% block content %}
 
-		{% for post in posts %}
-		<div>
-			<p>
-				published: {{ post.published_date }}
-			</p>
-			<h1><a href="">{{ post.title }}</a></h1>
-			<p>
-				{{ post.text|linebreaksbr }}
-			</p>
-		</div>
-		{% endfor %}
-	</body>
-</html>
+{% for post in posts %}
+<div>
+	<p>
+		published: {{ post.published_date }}
+	</p>
+	<h1><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h1>
+	<p>
+		{{ post.text|linebreaksbr }}
+	</p>
+</div>
+{% endfor %}
+{% endblock %}

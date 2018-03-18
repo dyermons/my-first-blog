@@ -8,7 +8,8 @@ from django.shortcuts import redirect
 # Create your views here.
 
 def post_list(request):
-    posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
+    posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
+    # posts = Post.objects.dates('published_date', 'year', order='DESC')
     return render(request, 'comdty/post_list.html',{'posts':posts})
 
 
@@ -18,15 +19,19 @@ def post_detail(request, pk):
 
 def post_new(request):
     if request.method == "POST":
-        form = PostForm(request.POST)
+        form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
             post.published_date = timezone.now()
+
             post.save()
             return redirect('post_detail', pk=post.pk)
     else:
         form = PostForm(request.POST)
+
+    documents = Post.objects.all()
+
     return render(request, 'comdty/post_edit.html', {'form':form})
 
 def post_edit(request, pk):
